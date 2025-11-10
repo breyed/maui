@@ -407,6 +407,16 @@ internal struct CompiledBindingMarkup
 			}
 		}
 
+		// Handle self-binding case (path is "." or empty after splitting)
+		if (bindingPathParts.Count == 0)
+		{
+			// For self-bindings, the property type is the source type itself
+			// and there's no property to set, so we mark it as not writable
+			setterOptions = new SetterOptions(
+				IsWritable: false,
+				AcceptsNullValue: sourceType.IsTypeNullable(enabledNullable: true));
+		}
+
 		if (isNullable)
 		{
 			if (propertyType.IsValueType)
