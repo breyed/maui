@@ -361,7 +361,8 @@ Assert.Contains("getter: source => (source, true)", generated, StringComparison.
 Assert.Contains("global::System.Action<global::Test.TestViewModel, global::Test.TestViewModel>? setter = null;", generated, StringComparison.Ordinal);
 
 // Verify handlers array is empty for self-bindings (no items in the array)
-Assert.Contains("handlers: new global::System.Tuple<global::System.Func<global::Test.TestViewModel, object?>, string>[]", generated, StringComparison.Ordinal);
-Assert.Contains("{\n\t\t\t\t});", generated, StringComparison.Ordinal);
+// Use regex to match the empty array pattern without relying on exact whitespace
+var emptyHandlersPattern = @"handlers:\s*new\s+global::System\.Tuple<global::System\.Func<global::Test\.TestViewModel,\s*object\?>,\s*string>\[\]\s*\{\s*\}";
+Assert.Matches(emptyHandlersPattern, generated);
 }
 }
