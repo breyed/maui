@@ -300,11 +300,14 @@ public partial class TestPage
 				.Where(static line => !string.IsNullOrWhiteSpace(line));
 	}
 
-	[Fact]
-	public void CanCompileSelfBinding()
+	[Theory]
+	[InlineData(".")]
+	[InlineData("")]
+	public void CanCompileSelfBinding(string bindingPath)
 {
+var bindingExpression = string.IsNullOrEmpty(bindingPath) ? "{Binding}" : $"{{Binding {bindingPath}}}";
 var xaml =
-"""
+$$"""
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage
 xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -312,7 +315,7 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 xmlns:test="clr-namespace:Test"
 x:Class="Test.TestPage"
 x:DataType="test:TestViewModel">
-<Label Text="{Binding .}"/>
+<Label Text="{{bindingExpression}}"/>
 </ContentPage>
 """;
 
@@ -357,7 +360,8 @@ Assert.Contains("getter: source => (source, true)", generated, StringComparison.
 // Verify setter is null for self-bindings (not writable)
 Assert.Contains("global::System.Action<global::Test.TestViewModel, global::Test.TestViewModel>? setter = null;", generated, StringComparison.Ordinal);
 
-// Verify handlers array is empty for self-bindings
+// Verify handlers array is empty for self-bindings (no items in the array)
 Assert.Contains("handlers: new global::System.Tuple<global::System.Func<global::Test.TestViewModel, object?>, string>[]", generated, StringComparison.Ordinal);
+Assert.Contains("{\n\t\t\t\t});", generated, StringComparison.Ordinal);
 }
 }
