@@ -301,25 +301,25 @@ public partial class TestPage
 	}
 
 	[Theory]
-	[InlineData(".")]
-	[InlineData("")]
-	public void CanCompileSelfBinding(string bindingPath)
-{
-var bindingExpression = string.IsNullOrEmpty(bindingPath) ? "{Binding}" : $"{{Binding {bindingPath}}}";
-var xaml =
+	[InlineData("{Binding .}")]
+	[InlineData("{Binding}")]
+	[InlineData("{Binding Path=.}")]
+	public void CanCompileSelfBinding(string bindingExpression)
+	{
+		var xaml =
 $$"""
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage
-xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-xmlns:test="clr-namespace:Test"
-x:Class="Test.TestPage"
-x:DataType="test:TestViewModel">
-<Label Text="{{bindingExpression}}"/>
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:test="clr-namespace:Test"
+	x:Class="Test.TestPage"
+	x:DataType="test:TestViewModel">
+	<Label Text="{{bindingExpression}}"/>
 </ContentPage>
 """;
 
-var code =
+		var code =
 """
 #nullable enable
 using System;
@@ -331,38 +331,38 @@ namespace Test;
 [XamlProcessing(XamlInflator.SourceGen)]
 public partial class TestPage : ContentPage
 {
-public TestPage()
-{
-InitializeComponent();
-}
+	public TestPage()
+	{
+		InitializeComponent();
+	}
 }
 
 public class TestViewModel
 {
-public override string ToString() => "ViewModel Value";
+	public override string ToString() => "ViewModel Value";
 }
 """;
 
-var (result, generated) = RunGenerator(xaml, code);
+		var (result, generated) = RunGenerator(xaml, code);
 
-// Verify it compiles without errors
-Assert.Empty(result.Diagnostics);
+		// Verify it compiles without errors
+		Assert.Empty(result.Diagnostics);
 
-// Verify generated code exists
-Assert.NotNull(generated);
+		// Verify generated code exists
+		Assert.NotNull(generated);
 
-// Verify the generated code contains a TypedBinding for self-binding
-Assert.Contains("TypedBinding<global::Test.TestViewModel, global::Test.TestViewModel>", generated, StringComparison.Ordinal);
+		// Verify the generated code contains a TypedBinding for self-binding
+		Assert.Contains("TypedBinding<global::Test.TestViewModel, global::Test.TestViewModel>", generated, StringComparison.Ordinal);
 
-// Verify the getter is the identity function for self-binding
-Assert.Contains("getter: source => (source, true)", generated, StringComparison.Ordinal);
+		// Verify the getter is the identity function for self-binding
+		Assert.Contains("getter: source => (source, true)", generated, StringComparison.Ordinal);
 
-// Verify setter is null for self-bindings (not writable)
-Assert.Contains("global::System.Action<global::Test.TestViewModel, global::Test.TestViewModel>? setter = null;", generated, StringComparison.Ordinal);
+		// Verify setter is null for self-bindings (not writable)
+		Assert.Contains("global::System.Action<global::Test.TestViewModel, global::Test.TestViewModel>? setter = null;", generated, StringComparison.Ordinal);
 
-// Verify handlers array is empty for self-bindings (no items in the array)
-// Use regex to match the empty array pattern without relying on exact whitespace
-var emptyHandlersPattern = @"handlers:\s*new\s+global::System\.Tuple<global::System\.Func<global::Test\.TestViewModel,\s*object\?>,\s*string>\[\]\s*\{\s*\}";
-Assert.Matches(emptyHandlersPattern, generated);
-}
+		// Verify handlers array is empty for self-bindings (no items in the array)
+		// Use regex to match the empty array pattern without relying on exact whitespace
+		var emptyHandlersPattern = @"handlers:\s*new\s+global::System\.Tuple<global::System\.Func<global::Test\.TestViewModel,\s*object\?>,\s*string>\[\]\s*\{\s*\}";
+		Assert.Matches(emptyHandlersPattern, generated);
+	}
 }
