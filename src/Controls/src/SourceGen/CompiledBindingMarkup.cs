@@ -416,20 +416,16 @@ internal struct CompiledBindingMarkup
 				IsWritable: false,
 				AcceptsNullValue: sourceType.IsTypeNullable(enabledNullable: true));
 		}
-
-		if (isNullable)
+		
+		// Apply nullable annotation if any part of the path introduces nullability
+		// For reference types, mark as nullable so the TypedBinding signature is correct
+		// For value types, we don't mark as nullable here because GenerateGetterExpression
+		// will add ?? default fallback for non-nullable value types with conditional access
+		if (isNullable && !propertyType.IsValueType)
 		{
-			if (propertyType.IsValueType)
-			{
-				propertyType = _context.Compilation.GetSpecialType(SpecialType.System_Nullable_T).Construct(propertyType);
-			}
-			else
-			{
-				propertyType = propertyType.WithNullableAnnotation(NullableAnnotation.Annotated);
-			}
+			propertyType = propertyType.WithNullableAnnotation(NullableAnnotation.Annotated);
 		}
 
-		propertyType = previousPartType;
 		bindingPath = new EquatableArray<IPathPart>(bindingPathParts.ToArray());
 		return true;
 	}
