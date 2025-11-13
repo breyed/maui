@@ -14,7 +14,7 @@ public class Issue32277_ContentPage : ContentPage
 	public Issue32277_ContentPage()
 	{
 		Title = "Issue 32277";
-		
+
 		Button button = new Button
 		{
 			Text = "Push Modal Flyout Page",
@@ -45,8 +45,8 @@ public class Issue32277_FlyoutPage : FlyoutPage
 			{
 				Children =
 				{
-					new Label 
-					{ 
+					new Label
+					{
 						Text = "This is the flyout page.",
 						AutomationId = "FlyoutLabel"
 					}
@@ -61,8 +61,8 @@ public class Issue32277_FlyoutPage : FlyoutPage
 			{
 				Children =
 				{
-					new Label 
-					{ 
+					new Label
+					{
 						Text = "This is the detail page.",
 						AutomationId = "DetailLabel"
 					}
