@@ -72,11 +72,19 @@ namespace Microsoft.Maui.Controls
 				}
 
 				// Send NavigatedFrom and NavigatedTo events
+
+<<<<<<< TODO: Unmerged change from project 'Controls.Core(netstandard2.0)', Before:
 				if (previousDetail is not null)
 				{
 					previousDetail.SendNavigatedFrom(
 						new NavigatedFromEventArgs(destinationPage: value, NavigationType.Replace));
 				}
+=======
+				previousDetail?.SendNavigatedFrom(
+						new NavigatedFromEventArgs(destinationPage: value, NavigationType.Replace));
+>>>>>>> After
+				previousDetail?.SendNavigatedFrom(
+						new NavigatedFromEventArgs(destinationPage: value, NavigationType.Replace));
 
 				_detail.SendNavigatedTo(new NavigatedToEventArgs(previousDetail, NavigationType.Replace));
 			}
@@ -116,7 +124,7 @@ namespace Microsoft.Maui.Controls
 
 				// TODO MAUI refine this to fire earlier
 				var previousFlyout = _flyout;
-				
+
 				// TODO MAUI refine this to fire earlier
 				previousFlyout?.SendNavigatingFrom(new NavigatingFromEventArgs(value, NavigationType.Replace));
 
@@ -132,7 +140,7 @@ namespace Microsoft.Maui.Controls
 					previousFlyout?.SendDisappearing();
 					_flyout?.SendAppearing();
 				}
-				
+
 				previousFlyout?.SendNavigatedFrom(new NavigatedFromEventArgs(_flyout, NavigationType.Replace));
 				_flyout?.SendNavigatedTo(new NavigatedToEventArgs(previousFlyout, NavigationType.Replace));
 			}

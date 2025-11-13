@@ -62,7 +62,7 @@ public class Issue28986 : _IssuesUITest
 
 		// Now set to All (should apply all safe area insets)
 		App.Tap("GridResetAllButton");
-		
+
 		// Get the rect after setting All
 		var allRect = App.WaitForElement("MainGrid").GetRect();
 
@@ -73,7 +73,7 @@ public class Issue28986 : _IssuesUITest
 		// This test validates behavior consistency rather than assuming specific padding values.
 		Assert.That(allRect.Height, Is.LessThanOrEqualTo(noneRect.Height),
 			"MainGrid height with All should be less than or equal to None (All respects safe area)");
-		
+
 		// SoftInput should match None when keyboard is hidden (no bottom padding)
 		Assert.That(softInputRect.Height, Is.EqualTo(noneRect.Height).Within(5),
 			"MainGrid height with SoftInput should match None when keyboard is hidden");
