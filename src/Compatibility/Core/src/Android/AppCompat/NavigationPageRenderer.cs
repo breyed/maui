@@ -745,7 +745,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppCompat
 			UpdateMenu();
 
 			// Preserve old values that can't be replicated by calling methods above
-			_toolbar?.Subtitle = oldToolbar.Subtitle;
+			if (_toolbar != null)
+				_toolbar.Subtitle = oldToolbar.Subtitle;
 		}
 
 		void SetupToolbar()
@@ -783,7 +784,10 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppCompat
 			Current?.SendDisappearing();
 			Current = page;
 
-			Platform?.NavAnimationInProgress = true;
+			if (Platform != null)
+			{
+				Platform.NavAnimationInProgress = true;
+			}
 
 			FragmentTransaction transaction = FragmentManager.BeginTransactionEx();
 
@@ -855,7 +859,10 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppCompat
 
 			Context.HideKeyboard(this);
 
-			Platform?.NavAnimationInProgress = false;
+			if (Platform != null)
+			{
+				Platform.NavAnimationInProgress = false;
+			}
 
 			return tcs.Task;
 		}
@@ -975,7 +982,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppCompat
 			if (_toolbar.NavigationIcon != null && textColor != null)
 			{
 				var icon = _toolbar.NavigationIcon as DrawerArrowDrawable;
-				icon?.Color = textColor.ToAndroid().ToArgb();
+				if (icon != null)
+					icon.Color = textColor.ToAndroid().ToArgb();
 			}
 
 			UpdateTitleIcon();
@@ -1038,7 +1046,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android.AppCompat
 				var rendererType = reflectableType != null ? reflectableType.GetTypeInfo().AsType() : _titleViewRenderer.GetType();
 				if (titleView == null || Internals.Registrar.Registered.GetHandlerTypeForObject(titleView) != rendererType)
 				{
-					_titleView?.Child = null;
+					if (_titleView != null)
+						_titleView.Child = null;
 					Platform.ClearRenderer(_titleViewRenderer.View);
 					_titleViewRenderer.Dispose();
 					_titleViewRenderer = null;

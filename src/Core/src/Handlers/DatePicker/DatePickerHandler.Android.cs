@@ -77,7 +77,10 @@ namespace Microsoft.Maui.Handlers
 		{
 			var dialog = new DatePickerDialog(Context!, (o, e) =>
 			{
-				VirtualView?.Date = e.Date;
+				if (VirtualView is not null)
+				{
+					VirtualView.Date = e.Date;
+				}
 			}, year, month, day);
 
 			dialog.DismissEvent += OnDialogDismiss;

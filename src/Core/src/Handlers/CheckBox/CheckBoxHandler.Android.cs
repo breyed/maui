@@ -46,7 +46,8 @@ namespace Microsoft.Maui.Handlers
 
 		void OnCheckedChange(object? sender, CompoundButton.CheckedChangeEventArgs e)
 		{
-			VirtualView?.IsChecked = e.IsChecked;
+			if (VirtualView != null)
+				VirtualView.IsChecked = e.IsChecked;
 		}
 	}
 }

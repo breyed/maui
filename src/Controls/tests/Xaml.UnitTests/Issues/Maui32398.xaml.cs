@@ -9,12 +9,12 @@ namespace Microsoft.Maui.Controls.Xaml.UnitTests;
 public partial class Maui32398 : ContentPage
 {
 	public Maui32398() => InitializeComponent();
-
+	
 	public readonly BindableProperty NonStaticProperty =
 		BindableProperty.Create(nameof(NonStatic), typeof(string), typeof(Maui32398), default(string));
 	public string NonStatic
 	{
-		get; set;
+		get;set;
 	}
 
 	[TestFixture]
@@ -31,10 +31,10 @@ public partial class Maui32398 : ContentPage
 
 		[Test]
 		public void NonStaticBP([Values] XamlInflator inflator)
-		{
+        {
 			var page = new Maui32398(inflator);
 			Assert.AreEqual("foo", page.NonStatic);
 			Assert.AreNotEqual("foo", page.GetValue(page.NonStaticProperty));
-		}
+        }
 	}
 }

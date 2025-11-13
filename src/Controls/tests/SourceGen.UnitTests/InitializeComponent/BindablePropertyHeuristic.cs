@@ -56,11 +56,11 @@ public partial class BalanceView : Label
 """;
 
 		var (result, generated) = RunGenerator(xaml, code);
-
+		
 		// Should not have MAUIX2002 error
 		var mauix2002Diagnostics = result.Diagnostics.Where(d => d.Id == "MAUIX2002").ToList();
 		Assert.Empty(mauix2002Diagnostics);
-
+		
 		// Should have generated code
 		Assert.NotNull(generated);
 		Assert.Contains("Balance", generated, StringComparison.Ordinal);
@@ -115,11 +115,11 @@ public partial class BalanceView : Label
 """;
 
 		var (result, generated) = RunGenerator(xaml, code);
-
+		
 		// Should not have MAUIX2002 error
 		var mauix2002Diagnostics = result.Diagnostics.Where(d => d.Id == "MAUIX2002").ToList();
 		Assert.Empty(mauix2002Diagnostics);
-
+		
 		// Should have generated code
 		Assert.NotNull(generated);
 	}
@@ -167,7 +167,7 @@ public partial class BalanceView : Label
 """;
 
 		var (result, generated) = RunGenerator(xaml, code);
-
+		
 		// Should have MAUIX2002 error because there's no BindableProperty and no attribute
 		var mauix2002Diagnostics = result.Diagnostics.Where(d => d.Id == "MAUIX2002").ToList();
 		Assert.NotEmpty(mauix2002Diagnostics);
@@ -222,7 +222,7 @@ public partial class BalanceView : Label
 """;
 
 		var (result, generated) = RunGenerator(xaml, code);
-
+		
 		// Should have MAUIX2002 error because the name doesn't match
 		var mauix2002Diagnostics = result.Diagnostics.Where(d => d.Id == "MAUIX2002").ToList();
 		Assert.NotEmpty(mauix2002Diagnostics);
@@ -274,11 +274,11 @@ public partial class BalanceView : Label
 """;
 
 		var (result, generated) = RunGenerator(xaml, code);
-
+		
 		// Should NOT have MAUIX2002 error - should use property setter for literal values
 		var mauix2002Diagnostics = result.Diagnostics.Where(d => d.Id == "MAUIX2002").ToList();
 		Assert.Empty(mauix2002Diagnostics);
-
+		
 		// Should use property setter, not SetBinding
 		Assert.NotNull(generated);
 		Assert.Contains(".Balance = ", generated, StringComparison.Ordinal);

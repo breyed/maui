@@ -105,7 +105,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 		{
 			base.OnAttachedToWindow();
 
-			Control?.NestedScrollingEnabled = (Parent.GetParentOfType<NestedScrollView>() != null);
+			if (Control != null)
+				Control.NestedScrollingEnabled = (Parent.GetParentOfType<NestedScrollView>() != null);
 
 			_isAttached = true;
 			_adapter.IsAttachedToWindow = _isAttached;
@@ -348,7 +349,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 				var rendererType = reflectableType != null ? reflectableType.GetTypeInfo().AsType() : _footerRenderer.GetType();
 				if (footer == null || Registrar.Registered.GetHandlerTypeForObject(footer) != rendererType)
 				{
-					_footerView?.Child = null;
+					if (_footerView != null)
+						_footerView.Child = null;
 					Platform.ClearRenderer(_footerRenderer.View);
 					_footerRenderer.Dispose();
 					_footerRenderer = null;
@@ -363,7 +365,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 			else
 			{
 				_footerRenderer = Platform.CreateRenderer(footer, Context);
-				_footerView?.Child = _footerRenderer;
+				if (_footerView != null)
+					_footerView.Child = _footerRenderer;
 			}
 
 			Platform.SetRenderer(footer, _footerRenderer);
@@ -378,7 +381,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 				var rendererType = reflectableType != null ? reflectableType.GetTypeInfo().AsType() : _headerRenderer.GetType();
 				if (header == null || Registrar.Registered.GetHandlerTypeForObject(header) != rendererType)
 				{
-					_headerView?.Child = null;
+					if (_headerView != null)
+						_headerView.Child = null;
 					Platform.ClearRenderer(_headerRenderer.View);
 					_headerRenderer.Dispose();
 					_headerRenderer = null;
@@ -393,7 +397,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 			else
 			{
 				_headerRenderer = Platform.CreateRenderer(header, Context);
-				_headerView?.Child = _headerRenderer;
+				if (_headerView != null)
+					_headerView.Child = _headerRenderer;
 			}
 
 			Platform.SetRenderer(header, _headerRenderer);
@@ -422,12 +427,16 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 		void UpdateIsSwipeToRefreshEnabled()
 		{
-			_refresh?.Enabled = Element.IsPullToRefreshEnabled && (Element as IListViewController).RefreshAllowed;
+			if (_refresh != null)
+				_refresh.Enabled = Element.IsPullToRefreshEnabled && (Element as IListViewController).RefreshAllowed;
 		}
 
 		void UpdateFastScrollEnabled()
 		{
-			Control?.FastScrollEnabled = Element.OnThisPlatform().IsFastScrollEnabled();
+			if (Control != null)
+			{
+				Control.FastScrollEnabled = Element.OnThisPlatform().IsFastScrollEnabled();
+			}
 		}
 
 		void UpdateSelectionMode()

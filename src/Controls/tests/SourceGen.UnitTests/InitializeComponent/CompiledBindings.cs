@@ -482,7 +482,7 @@ public class Product
 }
 """;
 		var (result, generated) = RunGenerator(xaml, code);
-
+		
 		// Check that no CS8603 errors are present - even with non-nullable target property,
 		// the generated getter should handle the nullable path correctly
 		Assert.False(result.Diagnostics.Any(d => d.Id == "CS8603"));

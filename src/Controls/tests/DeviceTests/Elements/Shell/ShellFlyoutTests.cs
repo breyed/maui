@@ -133,14 +133,14 @@ namespace Microsoft.Maui.DeviceTests
 				}
 			});
 		}
-
-		// This test is passing locally for android
-		// the way the view positions with headless vs not headless
-		// is causing this to be an issue
-		// we have a number of ui tests and other tests that validate 
-		// header scroll.
-		// Because this works locally I'm not
-		// worried for this pr.
+		
+// This test is passing locally for android
+// the way the view positions with headless vs not headless
+// is causing this to be an issue
+// we have a number of ui tests and other tests that validate 
+// header scroll.
+// Because this works locally I'm not
+// worried for this pr.
 #if IOS
 		// This is mainly relevant for android because android will auto offset the content
 		// based on the height of the flyout header.
@@ -171,13 +171,13 @@ namespace Microsoft.Maui.DeviceTests
 				var footerFrame = GetFrameRelativeToFlyout(handler, (IView)shell.FlyoutFooter);
 
 				// validate footer position
-#if IOS
+				#if IOS
 				AssertionExtensions.CloseEnough(footerFrame.Y, headerFrame.Height + contentFrame.Height + GetSafeArea(handler.ToPlatform()).Top);
-#else
+				#else
 				// On android the we pad the top of the header frame by the safe area because how layout works
 				// so that is already included in the headerFrame Height
 				AssertionExtensions.CloseEnough(footerFrame.Y, headerFrame.Height + contentFrame.Height);
-#endif
+				#endif
 			});
 		}
 		
@@ -377,11 +377,11 @@ namespace Microsoft.Maui.DeviceTests
 					verticalDiff = Math.Abs(Math.Abs(frameWithMargin.Top - (frameWithoutMargin.Top)) - 30);
 				else
 				{
-#if ANDROID
+					#if ANDROID
 						verticalDiff = Math.Abs(Math.Abs(frameWithMargin.Top - (frameWithoutMargin.Top)) - 30);
-#else
+					#else
 						verticalDiff = Math.Abs(Math.Abs(frameWithMargin.Top - (frameWithoutMargin.Top - GetSafeArea(handler.ToPlatform()).Top)) - 30);
-#endif
+					#endif
 				}
 
 				Assert.True(leftDiff < 0.2, $"{partTesting} Left Margin Incorrect. Frame w/ margin: {frameWithMargin}. Frame w/o margin : {frameWithoutMargin}");
@@ -421,7 +421,7 @@ namespace Microsoft.Maui.DeviceTests
 #if WINDOWS || ANDROID
 			return Thickness.Zero;
 #endif
-
+			
 		}
 #endif
 

@@ -20,7 +20,8 @@ namespace Microsoft.Maui.ApplicationModel.DataTransfer
 
 		public Task SetTextAsync(string? text)
 		{
-			ClipboardManager?.PrimaryClip = ClipData.NewPlainText("Text", text ?? string.Empty);
+			if (ClipboardManager is not null)
+				ClipboardManager.PrimaryClip = ClipData.NewPlainText("Text", text ?? string.Empty);
 
 			return Task.CompletedTask;
 		}

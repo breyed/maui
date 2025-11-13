@@ -83,21 +83,15 @@ namespace Microsoft.Maui.Controls
 
 				var previousPage = _current;
 				OnPropertyChanging();
-
-<<<<<<< TODO: Unmerged change from project 'Controls.Core(netstandard2.0)', Before:
+ 				
+				// TODO: MAUI refine this to fire earlier
+				
+				// Send NavigatingFrom to the previous page or to the new page if no previous page exists
 				if (_current is not null)
 				{
 					_current.SendNavigatingFrom(new NavigatingFromEventArgs(value, NavigationType.Replace));
 				}
-=======
-				_current?.SendNavigatingFrom(new NavigatingFromEventArgs(value, NavigationType.Replace));
->>>>>>> After
-
-				// TODO: MAUI refine this to fire earlier
-
-				// Send NavigatingFrom to the previous page or to the new page if no previous page exists
-				_current?.SendNavigatingFrom(new NavigatingFromEventArgs(value, NavigationType.Replace));
-
+				
 				_current = value;
 
 				previousPage?.SendDisappearing();
@@ -107,8 +101,8 @@ namespace Microsoft.Maui.Controls
 
 				if (HasAppeared)
 					_current?.SendAppearing();
-
-
+				
+				
 				previousPage?.SendNavigatedFrom(new NavigatedFromEventArgs(_current, NavigationType.Replace));
 				_current?.SendNavigatedTo(new NavigatedToEventArgs(previousPage, NavigationType.Replace));
 			}

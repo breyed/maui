@@ -37,7 +37,8 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 			propertyChanged: (bindable, oldvalue, newvalue) =>
 			{
 				var view = bindable as VisualElement;
-				view?.IsPlatformEnabled = newvalue != null;
+				if (view != null)
+					view.IsPlatformEnabled = newvalue != null;
 
 				if (bindable is IView mauiView)
 				{

@@ -65,7 +65,8 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 		{
 			base.OnAttachedToWindow();
 
-			Control?.NestedScrollingEnabled = (Parent.GetParentOfType<NestedScrollView>() != null);
+			if (Control != null)
+				Control.NestedScrollingEnabled = (Parent.GetParentOfType<NestedScrollView>() != null);
 
 			_isAttached = true;
 			_adapter.IsAttachedToWindow = _isAttached;
@@ -426,7 +427,8 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 				var rendererType = reflectableType != null ? reflectableType.GetTypeInfo().AsType() : _footerRenderer.GetType();
 				if (footer == null || Registrar.Registered.GetHandlerTypeForObject(footer) != rendererType)
 				{
-					_footerView?.Child = null;
+					if (_footerView != null)
+						_footerView.Child = null;
 
 					_footerRenderer.VirtualView.Handler?.DisconnectHandler();
 					_footerRenderer = null;
@@ -441,7 +443,8 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 			else
 			{
 				_ = footer.ToPlatform(Element.FindMauiContext());
-				_footerView?.Child = (IPlatformViewHandler)footer.Handler;
+				if (_footerView != null)
+					_footerView.Child = (IPlatformViewHandler)footer.Handler;
 			}
 		}
 
@@ -454,7 +457,8 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 				var rendererType = reflectableType != null ? reflectableType.GetTypeInfo().AsType() : _headerRenderer.GetType();
 				if (header == null || MauiContext.Handlers.GetHandlerType(header.GetType()) != rendererType)
 				{
-					_headerView?.Child = null;
+					if (_headerView != null)
+						_headerView.Child = null;
 					_headerRenderer.VirtualView.Handler?.DisconnectHandler();
 					_headerRenderer = null;
 				}
@@ -468,7 +472,8 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 			else
 			{
 				_ = header.ToPlatform(Element.FindMauiContext());
-				_headerView?.Child = (IPlatformViewHandler)header.Handler;
+				if (_headerView != null)
+					_headerView.Child = (IPlatformViewHandler)header.Handler;
 			}
 		}
 
@@ -514,7 +519,12 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 
 		void UpdateFastScrollEnabled()
 		{
-			Control?.FastScrollEnabled = Element.OnThisPlatform().IsFastScrollEnabled();
+			if (Control != null)
+			{
+#pragma warning disable CS0618 // Type or member is obsolete
+				Control.FastScrollEnabled = Element.OnThisPlatform().IsFastScrollEnabled();
+#pragma warning restore CS0618 // Type or member is obsolete
+			}
 		}
 
 		void UpdateSelectionMode()

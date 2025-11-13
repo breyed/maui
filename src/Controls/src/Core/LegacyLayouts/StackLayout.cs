@@ -190,7 +190,8 @@ namespace Microsoft.Maui.Controls.Compatibility
 					minimumWidth = Math.Max(minimumWidth, request.Minimum.Width);
 				}
 				minimumHeight -= spacing;
-				expander?.ComputedConstraint = ComputeConstraintForView(expander, layout.Expanders == 1); // warning : slightly obtuse, but we either need to setup the expander or clear the last one
+				if (expander != null)
+					expander.ComputedConstraint = ComputeConstraintForView(expander, layout.Expanders == 1); // warning : slightly obtuse, but we either need to setup the expander or clear the last one
 			}
 			else
 			{
@@ -224,7 +225,8 @@ namespace Microsoft.Maui.Controls.Compatibility
 					minimumHeight = Math.Max(minimumHeight, request.Minimum.Height);
 				}
 				minimumWidth -= spacing;
-				expander?.ComputedConstraint = ComputeConstraintForView(expander, layout.Expanders == 1);
+				if (expander != null)
+					expander.ComputedConstraint = ComputeConstraintForView(expander, layout.Expanders == 1);
 			}
 
 			layout.Bounds = new Rect(x, y, boundsWidth, boundsHeight);

@@ -206,18 +206,24 @@ namespace Microsoft.Maui.Graphics.Skia
 					_blurRadius = radius;
 					_blurFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, _blurRadius);
 
-					_fillPaint?.MaskFilter = _blurFilter;
-					_strokePaint?.MaskFilter = _blurFilter;
-					_fontPaint?.MaskFilter = _blurFilter;
+					if (_fillPaint != null)
+						_fillPaint.MaskFilter = _blurFilter;
+					if (_strokePaint != null)
+						_strokePaint.MaskFilter = _blurFilter;
+					if (_fontPaint != null)
+						_fontPaint.MaskFilter = _blurFilter;
 				}
 				else
 				{
 					_isBlurred = false;
 					_blurRadius = 0;
 
-					_fillPaint?.MaskFilter = null;
-					_strokePaint?.MaskFilter = null;
-					_fontPaint?.MaskFilter = null;
+					if (_fillPaint != null)
+						_fillPaint.MaskFilter = null;
+					if (_strokePaint != null)
+						_strokePaint.MaskFilter = null;
+					if (_fontPaint != null)
+						_fontPaint.MaskFilter = null;
 				}
 			}
 		}
@@ -247,9 +253,17 @@ namespace Microsoft.Maui.Graphics.Skia
 				{
 					_font = value;
 
-					_fontPaint?.Typeface = GetSKTypeface();
+					if (_fontPaint != null)
+					{
+#pragma warning disable CS0618 // Type or member is obsolete
+						_fontPaint.Typeface = GetSKTypeface();
+#pragma warning restore CS0618 // Type or member is obsolete
+					}
 
-					_fontFont?.Typeface = GetSKTypeface();
+					if (_fontFont != null)
+					{
+						_fontFont.Typeface = GetSKTypeface();
+					}
 				}
 			}
 

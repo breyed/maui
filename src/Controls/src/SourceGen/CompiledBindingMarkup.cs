@@ -73,7 +73,7 @@ internal struct CompiledBindingMarkup
 
 		// Determine which properties were set in XAML
 		var propertyFlags = BindingPropertyFlags.None;
-
+		
 		if (_node.HasProperty("Mode"))
 			propertyFlags |= BindingPropertyFlags.Mode;
 		if (_node.HasProperty("Converter"))
@@ -92,11 +92,11 @@ internal struct CompiledBindingMarkup
 		//Generate the complete inline binding creation method
 		using var stringWriter = new StringWriter();
 		using var code = new IndentedTextWriter(stringWriter, "\t");
-
+		
 		code.WriteLine($"static global::Microsoft.Maui.Controls.BindingBase {methodName}({extensionTypeName} extension)");
 		code.WriteLine("{");
 		code.Indent++;
-
+		
 		// Setter initialization
 		// If we can determine the exact binding mode at compile time, we can avoid generating the setter or avoid the ShouldUseSetter method.
 		// If we cannot, we need to generate a ShouldUseSetter helper method.
@@ -161,7 +161,7 @@ internal struct CompiledBindingMarkup
 				code.Indent--;
 				code.WriteLine("};");
 			}
-
+		
 			if (generateShouldUseSetter)
 			{
 				code.Indent--;
@@ -174,7 +174,7 @@ internal struct CompiledBindingMarkup
 		{
 			code.WriteLine("null;");
 		}
-
+		
 		// TypedBinding creation
 		code.WriteLine($"return new global::Microsoft.Maui.Controls.Internals.TypedBinding<{binding.SourceType}, {binding.PropertyType}>(");
 		code.Indent++;
@@ -185,14 +185,14 @@ internal struct CompiledBindingMarkup
 		AppendHandlersArray(code, binding);
 		code.Write(")");
 		code.Indent--;
-
+		
 		// Object initializer if any properties are set
 		if (propertyFlags != BindingPropertyFlags.None)
 		{
 			code.WriteLine();
 			code.WriteLine("{");
 			code.Indent++;
-
+			
 			if (propertyFlags.HasFlag(BindingPropertyFlags.Mode))
 				code.WriteLine("Mode = extension.Mode,");
 			if (propertyFlags.HasFlag(BindingPropertyFlags.Converter))
@@ -222,7 +222,7 @@ internal struct CompiledBindingMarkup
 				else
 					code.WriteLine("TargetNullValue = extension.TargetNullValue,");
 			}
-
+			
 			code.Indent--;
 			code.WriteLine("};");
 		}
@@ -408,7 +408,7 @@ internal struct CompiledBindingMarkup
 		}
 
 		propertyType = previousPartType;
-
+		
 		// Apply nullable annotation if any part of the path introduces nullability
 		// For reference types, mark as nullable so the TypedBinding signature is correct
 		// For value types, we don't mark as nullable here because GenerateGetterExpression
@@ -475,12 +475,12 @@ internal struct CompiledBindingMarkup
 		code.WriteLine();
 		code.WriteLine("{");
 		code.Indent++;
-
+		
 		var setter = Setter.From(binding.Path, "source", "value");
 		if (setter.PatternMatchingExpressions.Length > 0)
 		{
 			code.Write("if (");
-
+			
 			for (int i = 0; i < setter.PatternMatchingExpressions.Length; i++)
 			{
 				if (i > 0)
@@ -490,7 +490,7 @@ internal struct CompiledBindingMarkup
 				}
 				code.Write(setter.PatternMatchingExpressions[i]);
 			}
-
+			
 			code.WriteLine(")");
 			code.WriteLine("{");
 			code.Indent++;
@@ -502,7 +502,7 @@ internal struct CompiledBindingMarkup
 		{
 			code.WriteLine(setter.AssignmentStatement);
 		}
-
+		
 		code.Indent--;
 		code.WriteLine("};");
 	}

@@ -125,9 +125,9 @@ public class HybridWebViewTests_InvokeDotNet : HybridWebViewTestsBase
 
 		public string? TestResult { get; set; }
 
-		public void TestMethod(string param)
-		{
+        public void TestMethod(string param)
+        {
 			ParamValues.Add(param);
-		}
-	}
+        }
+    }
 }
